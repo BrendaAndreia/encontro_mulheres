@@ -20,23 +20,79 @@
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:var(--cream);line-height:1.6}
 a{text-decoration:none;color:inherit}
+
+/* HERO COM CARROSSEL DE FUNDO */
 .hero{
-  min-height:92vh;display:flex;align-items:center;position:relative;overflow:hidden;
-  background:
-    linear-gradient(90deg,rgba(58,25,39,.80) 0%,rgba(88,39,57,.52) 48%,rgba(88,39,57,.18) 100%),
-    radial-gradient(circle at 80% 20%,#f4b5c8 0,#c36a8a 28%,#6e3048 75%);
+  min-height:92vh;
+  display:flex;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
   color:white;
 }
-.hero::before{
-  content:"";position:absolute;inset:0;
-  background-image:url("HERO-FOTO-AQUI.jpg");
-  background-size:cover;background-position:center;
-  opacity:.42;mix-blend-mode:screen;
+
+.hero-carousel{
+  position:absolute;
+  inset:0;
+  z-index:0;
 }
-.hero-content{position:relative;z-index:1;max-width:900px;padding:72px 8vw}
+
+.hero-slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity 1s ease-in-out;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:#382a30;
+}
+
+.hero-slide.active{
+  opacity:1;
+}
+
+/* Fundo desfocado para preencher sobrou de imagens verticais/horizontais */
+.hero-slide-bg{
+  position:absolute;
+  inset:-20px;
+  background-size:cover;
+  background-position:center;
+  filter:blur(20px) brightness(0.6);
+  transform:scale(1.1);
+}
+
+/* Imagem principal proporcional */
+.hero-slide-img{
+  position:relative;
+  z-index:1;
+  max-width:100%;
+  max-height:100%;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Camada para garantir leitura dos textos */
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(90deg, rgba(45, 18, 30, 0.85) 0%, rgba(75, 28, 48, 0.65) 50%, rgba(45, 18, 30, 0.40) 100%);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:900px;
+  padding:72px 8vw;
+}
+
 .eyebrow{text-transform:uppercase;letter-spacing:.22em;font:600 13px/1.2 Arial,sans-serif;margin-bottom:18px;opacity:.9}
 h1{font-size:clamp(54px,9vw,108px);line-height:.92;margin:0 0 24px;font-weight:400}
 .hero p{font-size:clamp(19px,2.2vw,27px);max-width:690px;margin:0 0 34px}
+
 .btn{
   display:inline-flex;align-items:center;justify-content:center;padding:15px 25px;border-radius:999px;
   background:#fff;color:var(--rose-dark);font:bold 15px Arial,sans-serif;letter-spacing:.03em;
@@ -68,73 +124,6 @@ h2{font-size:clamp(34px,5vw,56px);line-height:1.05;font-weight:400;margin:10px 0
 .c1{background:#f8dce5}.c2{background:#e9a9bd}.c3{background:#c96889}.c4{background:#9a3d60}.c5{background:#f4c4d3}
 .callout{background:#fff;padding:38px;border-radius:28px;box-shadow:var(--shadow)}
 .callout h3{font-size:30px;font-weight:400;margin:0 0 12px}
-
-/* Estilos do Carrossel */
-.carousel-container{
-  position:relative;
-  max-width:850px;
-  margin:35px auto 0;
-  border-radius:24px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  background:#000;
-}
-.carousel-slides{
-  display:flex;
-  transition:transform 0.5s ease-in-out;
-}
-.carousel-slide{
-  min-width:100%;
-  aspect-ratio:16/9;
-  position:relative;
-}
-.carousel-slide img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-.carousel-btn{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(255,255,255,0.7);
-  border:none;
-  color:var(--rose-dark);
-  font-size:24px;
-  padding:12px 18px;
-  cursor:pointer;
-  border-radius:50%;
-  transition:background 0.2s, transform 0.2s;
-  z-index:2;
-}
-.carousel-btn:hover{
-  background:rgba(255,255,255,0.95);
-  transform:translateY(-50%) scale(1.08);
-}
-.carousel-btn.prev{left:15px}
-.carousel-btn.next{right:15px}
-.carousel-indicators{
-  position:absolute;
-  bottom:15px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:8px;
-  z-index:2;
-}
-.carousel-indicator{
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  background:rgba(255,255,255,0.5);
-  cursor:pointer;
-  transition:background 0.3s, transform 0.3s;
-}
-.carousel-indicator.active{
-  background:#fff;
-  transform:scale(1.2);
-}
 
 /* Estilos do Formulário */
 .form-card{
@@ -188,6 +177,40 @@ footer p{margin:6px 0;color:#e8dbe0;font-size:15px}
 </head>
 <body>
 <header class="hero">
+  <!-- CARROSSEL DE FUNDO NO HERO -->
+  <div class="hero-carousel" id="heroCarousel">
+    <div class="hero-slide active">
+      <div class="hero-slide-bg" style="background-image: url('img/image1.jfif');"></div>
+      <img src="img/image1.jfif" alt="Encontro de Mulheres 1" class="hero-slide-img">
+    </div>
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('img/image2.jfif');"></div>
+      <img src="img/image2.jfif" alt="Encontro de Mulheres 2" class="hero-slide-img">
+    </div>
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('img/image3.jfif');"></div>
+      <img src="img/image3.jfif" alt="Encontro de Mulheres 3" class="hero-slide-img">
+    </div>
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('img/image4.jfif');"></div>
+      <img src="img/image4.jfif" alt="Encontro de Mulheres 4" class="hero-slide-img">
+    </div>
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('img/image5.jfif');"></div>
+      <img src="img/image5.jfif" alt="Encontro de Mulheres 5" class="hero-slide-img">
+    </div>
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('img/image6.jfif');"></div>
+      <img src="img/image6.jfif" alt="Encontro de Mulheres 6" class="hero-slide-img">
+    </div>
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('img/image7.jfif');"></div>
+      <img src="img/image7.jfif" alt="Encontro de Mulheres 7" class="hero-slide-img">
+    </div>
+  </div>
+
+  <div class="hero-overlay"></div>
+
   <div class="hero-content">
     <div class="eyebrow">Encontro de Mulheres · Outubro Rosa · 2026</div>
     <h1>Voltemos<br>ao Início</h1>
@@ -220,32 +243,6 @@ footer p{margin:6px 0;color:#e8dbe0;font-size:15px}
     <div class="card highlight" style="margin-top:18px">
       <div class="label">Endereço</div>
       <div class="value">Av. Ayrton Senna — Alphaville Araguaia, Goiânia — GO</div>
-    </div>
-  </div>
-</section>
-
-<!-- SEÇÃO DO CARROSSEL DE IMAGENS -->
-<section class="section">
-  <div class="container intro">
-    <div class="kicker">Edições Anteriores & Acolhimento</div>
-    <h2>Momentos Especiais</h2>
-    <p>Confira um pouco da nossa comunhão, preparo e dos encontros marcantes que vivemos juntas.</p>
-    
-    <div class="carousel-container">
-      <div class="carousel-slides" id="carouselSlides">
-        <div class="carousel-slide"><img src="img/image1.jfif" alt="Momento do Encontro 1"></div>
-        <div class="carousel-slide"><img src="img/image2.jfif" alt="Momento do Encontro 2"></div>
-        <div class="carousel-slide"><img src="img/image3.jfif" alt="Momento do Encontro 3"></div>
-        <div class="carousel-slide"><img src="img/image4.jfif" alt="Momento do Encontro 4"></div>
-        <div class="carousel-slide"><img src="img/image5.jfif" alt="Momento do Encontro 5"></div>
-        <div class="carousel-slide"><img src="img/image6.jfif" alt="Momento do Encontro 6"></div>
-        <div class="carousel-slide"><img src="img/image7.jfif" alt="Momento do Encontro 7"></div>
-      </div>
-      
-      <button class="carousel-btn prev" id="prevBtn" aria-label="Imagem Anterior">&#10094;</button>
-      <button class="carousel-btn next" id="nextBtn" aria-label="Próxima Imagem">&#10095;</button>
-
-      <div class="carousel-indicators" id="carouselIndicators"></div>
     </div>
   </div>
 </section>
@@ -311,73 +308,21 @@ footer p{margin:6px 0;color:#e8dbe0;font-size:15px}
 </footer>
 
 <script>
-  // --- CARROSSEL DE IMAGENS ---
-  const slides = document.getElementById('carouselSlides');
-  const slideCount = document.querySelectorAll('.carousel-slide').length;
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const indicatorsContainer = document.getElementById('carouselIndicators');
-  let currentIndex = 0;
-  let autoSlideInterval;
+  // --- CARROSSEL AUTOMÁTICO NO HERO ---
+  const heroSlides = document.querySelectorAll('.hero-slide');
+  let currentHeroSlide = 0;
 
-  // Criar indicadores
-  for (let i = 0; i < slideCount; i++) {
-    const indicator = document.createElement('div');
-    indicator.classList.add('carousel-indicator');
-    if (i === 0) indicator.classList.add('active');
-    indicator.addEventListener('click', () => goToSlide(i));
-    indicatorsContainer.appendChild(indicator);
+  function nextHeroSlide() {
+    heroSlides[currentHeroSlide].classList.remove('active');
+    currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+    heroSlides[currentHeroSlide].classList.add('active');
   }
 
-  const indicators = document.querySelectorAll('.carousel-indicator');
-
-  function updateCarousel() {
-    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
-    indicators.forEach((ind, idx) => {
-      ind.classList.toggle('active', idx === currentIndex);
-    });
-  }
-
-  function goToSlide(index) {
-    currentIndex = index;
-    updateCarousel();
-    resetAutoSlide();
-  }
-
-  function nextSlide() {
-    currentIndex = (currentIndex + 1) % slideCount;
-    updateCarousel();
-  }
-
-  function prevSlide() {
-    currentIndex = (currentIndex - 1 + slideCount) % slideCount;
-    updateCarousel();
-  }
-
-  nextBtn.addEventListener('click', () => {
-    nextSlide();
-    resetAutoSlide();
-  });
-
-  prevBtn.addEventListener('click', () => {
-    prevSlide();
-    resetAutoSlide();
-  });
-
-  function startAutoSlide() {
-    autoSlideInterval = setInterval(nextSlide, 4000);
-  }
-
-  function resetAutoSlide() {
-    clearInterval(autoSlideInterval);
-    startAutoSlide();
-  }
-
-  startAutoSlide();
+  setInterval(nextHeroSlide, 5000);
 
 
   // --- FORMULÁRIO DE INSCRIÇÃO ---
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOVSC-KBhvs2AyXHcYcjDyWYSiMQgM9ZSD1u7565MS2ZugPH-6711oapuCpBEreTq5tA/exec';
+  const SCRIPT_URL = 'SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI';
   const INFINITEPAY_URL = 'https://link.infinitepay.io/dayflorescer2026/VC1D-CtlbxK6Mds-30,00';
 
   const form = document.getElementById('formInscricao');
