@@ -43,7 +43,7 @@ a{text-decoration:none;color:inherit}
   opacity:0;
   transition:opacity 1s ease-in-out;
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
   overflow:hidden;
   background:#382a30;
@@ -71,7 +71,7 @@ a{text-decoration:none;color:inherit}
   max-height:100%;
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:contain;
 }
 
 /* Camada para garantir leitura dos textos */
@@ -191,7 +191,7 @@ footer p{margin:6px 0;color:#e8dbe0;font-size:15px}
       <div class="hero-slide-bg" style="background-image: url('img/image3.jfif');"></div>
       <img src="img/image3.jfif" alt="Encontro de Mulheres 3" class="hero-slide-img">
     </div>
-    <div class="hero-slide">
+    <div class="hero-slide ">
       <div class="hero-slide-bg" style="background-image: url('img/image4.jfif');"></div>
       <img src="img/image4.jfif" alt="Encontro de Mulheres 4" class="hero-slide-img">
     </div>
@@ -318,7 +318,7 @@ footer p{margin:6px 0;color:#e8dbe0;font-size:15px}
     heroSlides[currentHeroSlide].classList.add('active');
   }
 
-  setInterval(nextHeroSlide, 5000);
+  setInterval(nextHeroSlide, 4000);
 
 
   // --- FORMULÁRIO DE INSCRIÇÃO ---
